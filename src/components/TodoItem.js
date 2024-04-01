@@ -2,6 +2,7 @@ import styled from "styled-components";
 import checkedIcon from "../assets/icon/check.png";
 import deletedIcon from "../assets/icon/clear.png";
 
+//#region styled-components 
 // todoItem 外容器
 const Container = styled.div`
   position: relative;
@@ -24,10 +25,9 @@ const Wrapper = styled.div`
 `;
 
 //-           客製化checkbox              -//
-
+//#region
 // checkbox容器
 const CheckboxWrapper = styled.div`
-  /* border: 1px solid red; */
   display: flex;
   margin-right: 20px;
 `;
@@ -57,12 +57,18 @@ const StyledCheckbox = styled.label`
   border: none;
   border-radius: 6px;
 `;
+//#endregion
 
 const CloseBtn = styled.button`
   background-color:initial;
   border: none;
 `;
-export default function TodoItem(props) {
+
+//#endregion styled-components 
+
+export default function TodoItem({todo}) {
+
+
   return (
     <Container>
       <Wrapper>
@@ -70,7 +76,7 @@ export default function TodoItem(props) {
           <HiddenCheckbox></HiddenCheckbox>
           <StyledCheckbox></StyledCheckbox>
         </CheckboxWrapper>
-        <div>todoItem</div>
+        <div>{todo}</div>
         </Wrapper>
         <CloseBtn>
           <img src={deletedIcon} width={12} alt="delete the task" />

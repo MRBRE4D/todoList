@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useContext } from "react";
+import { TodoContext } from "../hooks/TodoContext";
 
+import styled from "styled-components";
 import addIcon from "../assets/icon/add.png";
 
+//#region  styled-components
 const Wrapper = styled.div`
   /* border: 0.5px solid red; */
   display: flex;
@@ -11,7 +13,7 @@ const Wrapper = styled.div`
   height: 76px;
   max-width: 600px;
   margin: 16px 0;
-  color: #6B80C2;
+  color: #6b80c2;
 `;
 const WrapperInput = styled.div`
   display: flex;
@@ -25,7 +27,7 @@ const Input = styled.input`
   background-color: white;
   border: none;
   border-radius: 5px;
-  outline:none;
+  outline: none;
   letter-spacing: 0.05em;
   flex-grow: 4;
   font-size: 18px;
@@ -40,22 +42,30 @@ const AddBtn = styled.button`
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 56px;
-  background-color:#6B80C2;
+  background-color: #6b80c2;
   cursor: pointer;
   &:hover {
     background-color: #2e47b1;
   }
 `;
+//#endregion  styled-components
 
-export default function Add({ onAdd }) {
-  const [value, setValue] = useState("");
+const Control = () => {
+  //Context 傳過來的"增加todo"操作
+  const { addTodo } = useContext(TodoContext);
 
-  const onChange = (e) => {
-    setValue(e.target.value);
+  // todo 內容
+  const [todoContent, setTodoContent] = useState("");
+
+  const handleChange = (e) => {
+    setTodoContent(e.target.value);
+    console.log(e.target.value);
   };
-  const addItem = (e) => {
-    onAdd(value);
-    setValue("");
+
+  const handleClick = (e) => {
+    addTodo(todoContent);
+
+    // setTodoContent("");
   };
 
   return (
@@ -63,12 +73,18 @@ export default function Add({ onAdd }) {
       <Wrapper>
         <div>Add to list</div>
         <WrapperInput>
-          <Input value={value} onChange={onChange} />
-          <AddBtn type="" onClick={addItem}>
+          <Input
+            value={todoContent}
+            // onKeyDown={handleClick}
+            onChange={handleChange}
+          />
+          <AddBtn onClick={() => handleClick()}>
             <img src={addIcon} alt="" />
           </AddBtn>
         </WrapperInput>
       </Wrapper>
     </>
   );
-}
+};
+
+export default Control;
