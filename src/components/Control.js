@@ -46,12 +46,13 @@ const AddBtn = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #2e47b1;
+    transition: 0.5s;
   }
 `;
 //#endregion  styled-components
 
 const Control = () => {
-  //Context 傳過來的"增加todo"操作
+  // 解構 Context 傳過來的 "增加todo" 操作
   const { addTodo } = useContext(TodoContext);
 
   // todo 內容
@@ -62,7 +63,8 @@ const Control = () => {
     console.log(e.target.value);
   };
 
-  const handleClick = (e) => {
+  // 點擊"+"按鈕後呼叫addTodo，並disptch ADD_TODO action
+  const handleClick = () => {
     addTodo(todoContent);
 
     // setTodoContent("");

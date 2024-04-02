@@ -14,7 +14,7 @@ export default function TodoList() {
   return (
     <Wrapper>
       {todos.map((todo) => {
-        return <TodoItem todo={todo.todoContent} />;
+        return <TodoItem key={todo.id} todoContent={todo.todoContent} id={todo.id} complete={todo.complete} />;
       })}
     </Wrapper>
   );
