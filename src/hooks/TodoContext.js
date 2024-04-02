@@ -35,11 +35,22 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
+  const deleteTodo = (todoId) => {
+    const newTodo = state.todos.filter((todo) => todo.id !== todoId);
+    dispatch({
+      type: ACTIONS.DELETE_TODO,
+      payload: {
+        todo: newTodo,
+      }
+    })
+  }
+
   // 透過useContext將包成物件的value傳遞給子物件(children)，使用時解構
   const value = {
     todos: state.todos,
     addTodo,
     toggleTodo,
+    deleteTodo,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

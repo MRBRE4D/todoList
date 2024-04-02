@@ -6,31 +6,33 @@ import addIcon from "../assets/icon/add.png";
 
 //#region  styled-components
 const Wrapper = styled.div`
-  /* border: 0.5px solid red; */
+  border: 0.5px solid red;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 76px;
   max-width: 600px;
+  /* min-width: 50px; */
   margin: 16px 0;
   color: #6b80c2;
 `;
 const WrapperInput = styled.div`
   display: flex;
   justify-content: flex-start;
-  /* border: 0.5px solid orange; */
+  
 `;
 
 const Input = styled.input`
   padding: 0.8em;
+  height: 1.5rem;
   margin-right: 4px;
   background-color: white;
   border: none;
   border-radius: 5px;
   outline: none;
   letter-spacing: 0.05em;
-  flex-grow: 4;
-  font-size: 18px;
+  flex-grow: 1;
+  flex-shrink: 1;
 `;
 
 const AddBtn = styled.button`
@@ -46,7 +48,7 @@ const AddBtn = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #2e47b1;
-    transition: 0.5s;
+    transition: 0.5s ease-in-out;
   }
 `;
 //#endregion  styled-components
@@ -63,6 +65,7 @@ const Control = () => {
     console.log(e.target.value);
   };
 
+  
   // 點擊"+"按鈕後呼叫addTodo，並disptch ADD_TODO action
   const handleClick = () => {
     addTodo(todoContent);
