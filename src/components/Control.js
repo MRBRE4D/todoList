@@ -12,14 +12,12 @@ const Wrapper = styled.div`
   justify-content: space-between;
   height: 76px;
   max-width: 600px;
-  /* min-width: 50px; */
   margin: 16px 0;
   color: #6b80c2;
 `;
 const WrapperInput = styled.div`
   display: flex;
   justify-content: flex-start;
-  
 `;
 
 const Input = styled.input`
@@ -62,6 +60,7 @@ const Control = () => {
 
   const handleChange = (e) => {
     setTodoContent(e.target.value);
+    
     console.log(e.target.value);
   };
 
@@ -70,7 +69,7 @@ const Control = () => {
   const handleClick = () => {
     addTodo(todoContent);
 
-    // setTodoContent("");
+    setTodoContent("");
   };
 
   return (

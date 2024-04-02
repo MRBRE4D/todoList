@@ -12,12 +12,11 @@ const Container = styled.label`
   margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
-  /* border: 1px solid red; */
   border-left: 6px solid #6b80c2;
   border-radius: 4px;
   background-color: #fff;
   &:hover{
-    
+    border-left: 6px solid #9393ff;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     transition: 0.2s;
   }
@@ -27,12 +26,11 @@ const Container = styled.label`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  /* border: 1px solid red; */
 `;
 
 //-           客製化checkbox              -//
-// 純CSS 動態更改label樣式
 //#region
+// 純CSS 動態更改label樣式
 // checkbox容器
 const CheckboxWrapper = styled.div`
   display: flex;
@@ -80,7 +78,7 @@ const ContentSpan = styled.span`
 `;
 
 // 刪除按鈕
-const CloseBtn = styled.button`
+const DeleteBtn = styled.button`
   background-color: initial;
   border: none;
   cursor: pointer;
@@ -122,9 +120,9 @@ export default function TodoItem({ todoContent, id, complete }) {
         <ContentSpan complete={complete}>{todoContent}</ContentSpan>
         {/* <div>id={id}</div> */}
       </Wrapper>
-      <CloseBtn onClick={handleClick}>
+      <DeleteBtn onClick={handleClick}>
         <img src={deletedIcon} width={12} alt="delete the task" />
-      </CloseBtn>
+      </DeleteBtn>
     </Container>
   );
 }
