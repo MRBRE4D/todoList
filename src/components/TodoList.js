@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import TodoItem from "./TodoItem";
-import { TodoContext } from "../hooks/TodoContext";
+import  { useTodo } from "../hooks/TodoContext";
 
 const Wrapper = styled.div`
   margin-top: 25px;
@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 export default function TodoList() {
-  const { todos } = useContext(TodoContext);
+  const { todos } = useTodo();
 
   return (
     <Wrapper>

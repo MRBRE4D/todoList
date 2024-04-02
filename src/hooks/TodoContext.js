@@ -1,5 +1,5 @@
 import TodoReducer, { ACTIONS, initState } from "./todoReducer";
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 export const TodoContext = createContext(initState);
 
@@ -41,9 +41,9 @@ export const TodoProvider = ({ children }) => {
       type: ACTIONS.DELETE_TODO,
       payload: {
         todo: newTodo,
-      }
-    })
-  }
+      },
+    });
+  };
 
   // 透過useContext將包成物件的value傳遞給子物件(children)，使用時解構
   const value = {
@@ -64,3 +64,13 @@ const todoObj = (todoContent) => {
     complete: false,
   };
 };
+// 將 useContext 及 TodoContext 的匯出自訂為Hook 在維護上比較方便 
+export const useTodo = () => {
+  const context = useContext(TodoContext);
+
+  if (context === "undefine") {
+    console.log("禁止在fn component以外使用");
+  }
+  return context;
+};
+

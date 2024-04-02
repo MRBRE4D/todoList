@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import checkedIcon from "../assets/icon/check.png";
 import deletedIcon from "../assets/icon/clear.png";
-import { useState, useContext } from "react";
-import { TodoContext } from "../hooks/TodoContext";
-
+import { useTodo } from "../hooks/TodoContext";
 //#region styled-components
 // todoItem 外容器
 const Container = styled.label`
@@ -96,7 +94,7 @@ const DeleteBtn = styled.button`
 
 export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo } = useContext(TodoContext);
+  const { toggleTodo, deleteTodo } = useTodo()
 
   const handleChange = () => {
     toggleTodo(id);

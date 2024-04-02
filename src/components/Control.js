@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { TodoContext } from "../hooks/TodoContext";
+import React, { useState} from "react";
+import  { useTodo } from "../hooks/TodoContext";
 
 import styled from "styled-components";
 import addIcon from "../assets/icon/add.png";
@@ -53,22 +53,21 @@ const AddBtn = styled.button`
 
 const Control = () => {
   // 解構 Context 傳過來的 "增加todo" 操作
-  const { addTodo } = useContext(TodoContext);
+  const { addTodo } =useTodo()
+  ;
 
   // todo 內容
   const [todoContent, setTodoContent] = useState("");
 
   const handleChange = (e) => {
     setTodoContent(e.target.value);
-    
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   
   // 點擊"+"按鈕後呼叫addTodo，並disptch ADD_TODO action
   const handleClick = () => {
     addTodo(todoContent);
-
     setTodoContent("");
   };
 
