@@ -26,6 +26,7 @@ const Wrapper = styled.div`
 `;
 
 //-           客製化checkbox              -//
+// 純CSS 動態更改label樣式
 //#region
 // checkbox容器
 const CheckboxWrapper = styled.div`
@@ -67,10 +68,12 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 `;
 //#endregion
 
-const ContentSpan = styled.div`
-  text-decoration: ${(props) => (props.complete ? "line-through" : "none")};
+//! 解構完的 complete 傳入要加上{} props.complete不用
+const ContentSpan = styled.span`
+  text-decoration: ${({complete}) => (complete ? "line-through" : "none")};
 `;
 
+// 刪除按鈕
 const CloseBtn = styled.button`
   background-color: initial;
   border: none;
@@ -78,40 +81,31 @@ const CloseBtn = styled.button`
 
 //#endregion styled-components
 
-export default function TodoItem(props) {
+export default function TodoItem({ todoContent, id, complete }) {
+
   // 由 Context 傳入的 toggleTodo 函式
   const { toggleTodo } = useContext(TodoContext);
 
-  // // 由父層傳入的 todo.complete 為勾選的預設值
-  // const [checked, setChecked] = useState(complete);
 
   const handleChange = () => {
-    toggleTodo(props.id);
-    // setChecked((prev) => !prev);
-    // console.log("complete 屬性的值現在是：", !complete);
+    toggleTodo(id);
   };
-  // console.log("checked=", checked);
-  // console.log("id=", props.id, "complete 屬性的值為：", complete);
-  // console.log( id,complete);
+  // console.log("id=", id, "complete ：", complete);
 
   return (
     <Container>
       <Wrapper>
         <CheckboxWrapper>
           <HiddenCheckbox
-            type="checkbox"
-            check={props.complete}
-            id={props.id}
-            onChange={handleChange}
-          ></HiddenCheckbox>
-          {/*   傳入的ID綁定按鈕  */}
-          <StyledCheckbox htmlFor={props.id}></StyledCheckbox>
+            check={complete}
+            id={id}
+            onChange={handleChange}></HiddenCheckbox>
+          <StyledCheckbox htmlFor={id}></StyledCheckbox>
         </CheckboxWrapper>
         <ContentSpan
-          complete={props.complete}
-          // style={{textDecoration:  complete ? "line-through": null}}
+          complete={complete}
         >
-          {props.todoContent}
+          {todoContent}
         </ContentSpan>
         {/* <div>id={id}</div> */}
       </Wrapper>
