@@ -64,7 +64,7 @@ const Control = () => {
   const handleClick = (e) => {
     if (!todoContent) {
       alert("輸入框不可為空");
-      return
+      return;
     }
     addTodo(todoContent);
     setTodoContent("");
@@ -75,10 +75,13 @@ const Control = () => {
   //   window.scrollTo(0, document.body.scrollHeight);
   // };
 
-// 監聽增加todo的動作，每次增加就滾到最底
-  useEffect(()=>{
-    window.scrollTo(0, document.body.scrollHeight);
-  },[addTodo])
+  // 監聽增加todo的動作，每次增加就滾到最底
+  //! bug 每次進行todo操作均會觸發頁面移到最底
+  useEffect(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+
+    console.log("又來了");
+  }, [addTodo]);
 
   return (
     <>
@@ -86,9 +89,10 @@ const Control = () => {
         <div>Add to list</div>
         <WrapperInput>
           <Input
-            id="a"
             value={todoContent}
-            // onKeyDown={handleClick}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleClick();
+            }}
             onChange={handleChange}
           />
           <AddBtn

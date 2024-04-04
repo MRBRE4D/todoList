@@ -15,7 +15,8 @@ export default function TodoList() {
   //! solution:　將 ID 改成根據日期
   //- logic : 先比較complete，一樣則比id(小的在前面)。true(完成)的在後面，false(沒完成)的在前面
 
-  console.log(...todos);
+  // console.log("length=",todos.length)
+  // console.log(...todos);
   return (
     <Wrapper>
       {todos
