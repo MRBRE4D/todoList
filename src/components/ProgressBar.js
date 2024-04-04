@@ -40,20 +40,20 @@ export default function ProgressBar() {
   const [percent, setPercent] = useState(0);
 
   // 已完成的todo另外複製成陣列
-  // const done = todos.filter((todo) => {
-  //   return todo.complete === 1;
-  // });
+  const done = todos.filter((todo) => {
+    return todo.complete === 1;
+  });
   // console.log("length=", todos.length);
   // console.log("todos=", todos.length, ...todos);
   // console.log("done=", done.length, ...done);
   // console.log(done.length, todos.length, num);
-  // useEffect(() => {
-  //   if (todos.length > 0) {
-  //     let num = (done.length / todos.length) * 100;
-  //     const result = num ? Math.floor(num) : 0;
-  //     setPercent(result);
-  //   }
-  // }, [todos, done]);
+  useEffect(() => {
+    if (todos.length > 0) {
+      let num = (done.length / todos.length) * 100;
+      const result = num ? Math.floor(num) : 0;
+      setPercent(result);
+    }
+  }, [todos, done]);
   console.log(percent);
   return (
     <Wrapper>

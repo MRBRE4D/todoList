@@ -71,17 +71,16 @@ const Control = () => {
   };
 
   // 放在handleClick裡，滾動會在增加前執行，少一個todo的高度
-  // const scrollToBottom = () => {
-  //   window.scrollTo(0, document.body.scrollHeight);
-  // };
+  const scrollToBottom = () => {
+    window.scrollTo(0, document.body.scrollHeight);
+  };
 
-  // 監聽增加todo的動作，每次增加就滾到最底
-  //! bug 每次進行todo操作均會觸發頁面移到最底
+  //TODO! 利用memorize hook 避免元件因為context的更新造成不必要渲染
+  
+  // 監聽文字的動作，每次增加就滾到最底
   useEffect(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-
-    console.log("又來了");
-  }, [addTodo]);
+    scrollToBottom()
+  }, [todoContent]);
 
   return (
     <>
