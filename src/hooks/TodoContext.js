@@ -1,4 +1,4 @@
-import TodoReducer, { ACTIONS, initState } from "./todoReducer";
+import TodoReducer, { ACTIONS, initState } from "./TodoReducer";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export const TodoContext = createContext(initState);
