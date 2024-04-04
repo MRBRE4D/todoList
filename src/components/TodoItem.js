@@ -13,7 +13,7 @@ const Container = styled.label`
   border-left: 6px solid #6b80c2;
   border-radius: 4px;
   background-color: #fff;
-  &:hover{
+  &:hover {
     border-left: 6px solid #9393ff;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     transition: 0.2s;
@@ -33,7 +33,6 @@ const Wrapper = styled.div`
 const CheckboxWrapper = styled.div`
   display: flex;
   margin-right: 20px;
-  
 `;
 
 // label客製化checkbox
@@ -70,9 +69,15 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 `;
 //#endregion
 
-//! 解構完的 complete 傳入要加上{} props.complete不用
-const ContentSpan = styled.span`
-  text-decoration: ${({ complete }) => (complete ? "line-through" : "none")};
+//- 解構完的 complete 傳入要加上{} props.complete不用
+//! notice: unknown  prop is being sent through the DOM 
+//! solu: shouldForwardProp 控制屬性傳遞 
+const ContentSpan = styled.span
+.withConfig({
+  shouldForwardProp: (props) => !["complete"].includes(props.complete),
+})
+`
+  text-decoration: ${(props) => (props.complete ? "line-through" : "none")};
 `;
 
 // 刪除按鈕
@@ -80,7 +85,7 @@ const DeleteBtn = styled.button`
   background-color: initial;
   border: none;
   cursor: pointer;
-  &:hover{
+  &:hover {
     -webkit-filter: brightness(80%);
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
@@ -94,29 +99,31 @@ const DeleteBtn = styled.button`
 
 export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo } = useTodo()
+  const { toggleTodo, deleteTodo } = useTodo();
 
   const handleChange = () => {
     toggleTodo(id);
   };
-  // console.log("id=", id, "complete ：", complete);
 
   const handleClick = () => {
     deleteTodo(id);
   };
   return (
-    <Container >
+    <Container>
       <Wrapper>
         <CheckboxWrapper>
           <HiddenCheckbox
-            check={complete}
+            checked={complete}
             id={id}
             onChange={handleChange}
           ></HiddenCheckbox>
           <StyledCheckbox htmlFor={id}></StyledCheckbox>
         </CheckboxWrapper>
-        <ContentSpan complete={complete}>{todoContent}</ContentSpan>
-        {/* <div>id={id}</div> */}
+        <ContentSpan
+          complete={complete}
+        >
+          {todoContent}
+        </ContentSpan>
       </Wrapper>
       <DeleteBtn onClick={handleClick}>
         <img src={deletedIcon} width={12} alt="delete the task" />

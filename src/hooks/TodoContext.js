@@ -19,10 +19,12 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
+//! error: react warning non-boolean attr 
+
   const toggleTodo = (todoId) => {
     const newTodo = state.todos.map((todo) => {
       if (todo.id === todoId) {
-        return { ...todo, complete: !todo.complete };
+        return { ...todo, complete: !todo.complete?1:0 };
       }
       return todo;
     });
@@ -57,14 +59,19 @@ export const TodoProvider = ({ children }) => {
 };
 
 // todo 模板
+//! error: react warning non-boolean attr 
+//! solu: boolean值 改成數字表示  false 改成 0
+
 const todoObj = (todoContent) => {
   return {
-    id: Math.floor(Math.random() * 100000),
+    id: Date.now(),
     todoContent,
-    complete: false,
+    complete: 0,
+    // id: Math.floor(Math.random() * 100000),
   };
 };
-// 將 useContext 及 TodoContext 的匯出自訂為Hook 在維護上比較方便 
+
+// 將 useContext 及 TodoContext 的匯出自訂為Hook 在維護上比較方便
 export const useTodo = () => {
   const context = useContext(TodoContext);
 
@@ -73,4 +80,3 @@ export const useTodo = () => {
   }
   return context;
 };
-

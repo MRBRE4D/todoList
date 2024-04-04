@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
+//#region styled-components
 const Wrapper = styled.div`
   margin-top: 12px;
   display: flex;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
 
 const ToggleWrapper = styled.div`
   position: relative;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
@@ -61,7 +62,15 @@ const ToggleInput = styled.input`
     }
   }
 `;
+//#endregion styled-components
+
 export default function Sort() {
+ 
+  const [sort, setSort] = useState(false);
+  
+  const handleSort = () => {
+    setSort(!sort);
+  };
   return (
     <Wrapper>
       <div>Move done things to end?</div>

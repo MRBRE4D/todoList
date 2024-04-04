@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TodoProvider } from "./hooks/TodoContext";
 import Titles from "./components/Titles";
-import Add from "./components/Control";
+import Control from "./components/Control";
 import Content from "./components/Content";
 
 const Container = styled.div`
@@ -19,7 +19,7 @@ export default function App() {
       <Container>
         <Titles />
         <Content />
-        <Add />
+        <Control />
       </Container>
     </TodoProvider>
   );

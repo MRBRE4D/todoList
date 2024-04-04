@@ -58,7 +58,6 @@ const Control = () => {
 
   const handleChange = (e) => {
     setTodoContent(e.target.value);
-    // console.log(e.target.value);
   };
 
   // 點擊"+"按鈕後將todo內容傳入addTodo，並將輸入框清空
@@ -97,7 +96,7 @@ const Control = () => {
               handleClick();
             }}
           >
-            <img src={addIcon} alt="" />
+            <img src={addIcon} alt="增加事項" />
           </AddBtn>
         </WrapperInput>
       </Wrapper>
