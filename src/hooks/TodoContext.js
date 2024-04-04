@@ -1,14 +1,16 @@
 import TodoReducer, { ACTIONS, initState } from "./todoReducer";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 
 export const TodoContext = createContext(initState);
 
 export const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TodoReducer, initState);
 
+  // reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
+
   const addTodo = (todoContent) => {
-    // 將輸入框value傳入模板並複製給 state.todos
     const todo = todoObj(todoContent);
+    // 複製一份新陣列加進新的todo
     const newTodo = state.todos.concat(todo);
 
     dispatch({
@@ -19,12 +21,12 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
-//! error: react warning non-boolean attr 
+  //! error: react warning non-boolean attr
 
   const toggleTodo = (todoId) => {
     const newTodo = state.todos.map((todo) => {
       if (todo.id === todoId) {
-        return { ...todo, complete: !todo.complete?1:0 };
+        return { ...todo, complete: !todo.complete ? 1 : 0 };
       }
       return todo;
     });
@@ -36,7 +38,7 @@ export const TodoProvider = ({ children }) => {
       },
     });
   };
-
+  // 利用filter刪掉對應id的todo
   const deleteTodo = (todoId) => {
     const newTodo = state.todos.filter((todo) => todo.id !== todoId);
     dispatch({
@@ -47,19 +49,23 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
+  const [sort, setSort] = useState(false);
+
   // 透過useContext將包成物件的value傳遞給子物件(children)，使用時解構
   const value = {
     todos: state.todos,
     addTodo,
     toggleTodo,
     deleteTodo,
+    sort,
+    setSort
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
 
 // todo 模板
-//! error: react warning non-boolean attr 
+//! error: react warning non-boolean attr
 //! solu: boolean值 改成數字表示  false 改成 0
 
 const todoObj = (todoContent) => {

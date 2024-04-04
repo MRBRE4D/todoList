@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useTodo } from "../hooks/TodoContext";
 
 //#region styled-components
 const Wrapper = styled.div`
@@ -66,16 +67,17 @@ const ToggleInput = styled.input`
 
 export default function Sort() {
  
-  const [sort, setSort] = useState(false);
-  
+  // const [sort, setSort] = useState(false);
+  const { sort, setSort } = useTodo();
   const handleSort = () => {
     setSort(!sort);
+    console.log("sort=",!sort)
   };
   return (
     <Wrapper>
       <div>Move done things to end?</div>
       <ToggleWrapper>
-        <ToggleInput id="toggle" type="checkbox" />
+        <ToggleInput id="toggle" type="checkbox" onChange={handleSort}/>
         <ToggleLabel htmlFor="toggle" />
       </ToggleWrapper>
     </Wrapper>

@@ -9,8 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 export default function TodoList() {
-  const { todos } = useTodo();
-  const sort = true;
+  const { todos, sort } = useTodo();
 
   //! bug: sort 改變原陣列 取消勾選後不會回到原有位置
   //! solution:　將 ID 改成根據日期
@@ -29,6 +28,8 @@ export default function TodoList() {
               : a.complete
               ? 1
               : -1;
+          } else {
+            return a.id < b.id ? -1 : 1;
           }
         })
         .map((todo) => {
