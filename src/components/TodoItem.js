@@ -71,7 +71,7 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 
 //- 解構完的 complete 傳入要加上{} props.complete不用
 //! notice: unknown  prop is being sent through the DOM 
-//! solu: shouldForwardProp 控制屬性傳遞 
+//! solution: shouldForwardProp 控制屬性傳遞 
 const ContentSpan = styled.span
 .withConfig({
   shouldForwardProp: (props) => !["complete"].includes(props.complete),
@@ -85,6 +85,8 @@ const DeleteBtn = styled.button`
   background-color: initial;
   border: none;
   cursor: pointer;
+
+  // 透過明暗改變處理hover效果，因應不同瀏覽器做了多個設置
   &:hover {
     -webkit-filter: brightness(80%);
     -webkit-transition: all 0.2s ease;

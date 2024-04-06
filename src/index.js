@@ -5,23 +5,18 @@ import App from "./App";
 import { ThemeProvider } from "styled-components";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
 const theme = {
   colors: {
     primary: "#6B80C2",
     primary_info: "#9393ff",
     primary_light: "#e9e8ff",
-    primary_success:"#d1cfff",
-    light:"#FBFBFF",
+    primary_success: "#d1cfff",
+    light: "#FBFBFF",
   },
 };
 
 root.render(
   <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
+      <App style = {{height:"100vh"}}/>
+    </ThemeProvider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

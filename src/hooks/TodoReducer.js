@@ -1,4 +1,4 @@
-// 初始值
+// reducer初始值
 export const initState = {
   todos: [],
 };
@@ -16,6 +16,7 @@ const TodoReducer = (state, action) => {
 
   // console.log("type", type);
   // console.log("payload", payload);
+  
 //- reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
   switch (type) {
     case ACTIONS.ADD_TODO:

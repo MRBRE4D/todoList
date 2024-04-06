@@ -34,19 +34,22 @@ const ProgressFill = styled.div.withConfig({
 //#endregion styled-component
 
 export default function ProgressBar() {
+
+  // 自訂hook
   const { todos } = useTodo();
 
-  // 完成任務百分比
+  // 完成任務百分比的數字
   const [percent, setPercent] = useState(0);
 
-  // 已完成的todo另外複製成陣列
+  // 已完成的todo另外複製成陣列，以計算完成百分比
   const done = todos.filter((todo) => {
     return todo.complete === 1;
   });
-  // console.log("length=", todos.length);
   // console.log("todos=", todos.length, ...todos);
   // console.log("done=", done.length, ...done);
   // console.log(done.length, todos.length, num);
+
+  // 監聽全部的todo(分母)，以及完成任務的todo(分子)
   useEffect(() => {
     if (todos.length > 0) {
       let num = (done.length / todos.length) * 100;

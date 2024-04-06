@@ -67,11 +67,11 @@ const ToggleInput = styled.input`
 
 export default function Sort() {
  
-  // const [sort, setSort] = useState(false);
+  
   const { sort, setSort } = useTodo();
   const handleSort = () => {
+    // 點擊按鈕改變 sort 的布林值，以決定是否將完成的任務置底
     setSort(!sort);
-    console.log("sort=",!sort)
   };
   return (
     <Wrapper>

@@ -21,6 +21,8 @@ export default function TodoList() {
     <Wrapper>
       {todos
         .sort((a, b) => {
+          // 當sort 為true，將完成的任務置底，並以時間戳記排序
+          // TODO 好像這邊可以精簡
           if (sort) {
             return a.complete === b.complete
               ? a.id < b.id
