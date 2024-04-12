@@ -1,4 +1,4 @@
- import TodoReducer, { ACTIONS, initState } from "./TodoReducer";
+import TodoReducer, { ACTIONS, initState } from "./TodoReducer";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export const TodoContext = createContext(initState);
@@ -12,8 +12,7 @@ export const TodoProvider = ({ children }) => {
     todoContent: "",
   });
   // 是否處在編輯狀態
-  const [editMode, setEditMode] = useState(false)
-
+  const [editMode, setEditMode] = useState(false);
 
   // reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
 
@@ -57,6 +56,25 @@ export const TodoProvider = ({ children }) => {
       },
     });
   };
+
+  const updateTodo = (todoId, todoContent) => {
+    const netTodo = state.todos.map((todo) => {
+      if (todo.id == todoId) {
+        return {
+          ...todo,
+          todoContent,
+        };
+      }
+    });
+
+    dispatch({
+      type: ACTIONS.EDIT_TODO,
+      payload: {
+        todo: netTodo,
+      },
+    });
+  };
+
   // 是否將已完成任務置底的State
   const [sort, setSort] = useState(false);
 
@@ -66,6 +84,7 @@ export const TodoProvider = ({ children }) => {
     addTodo,
     toggleTodo,
     deleteTodo,
+    updateTodo,
     sort,
     setSort,
     todo,

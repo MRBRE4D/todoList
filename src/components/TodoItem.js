@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import checkedIcon from "../assets/icon/check.png";
 import deletedIcon from "../assets/icon/clear.png";
+import EditIcon from "../assets/icon/edit.png";
 import { useTodo } from "../hooks/TodoContext";
+import { useState } from "react";
 //#region styled-components
 // todoItem 外容器
 const Container = styled.label`
@@ -95,11 +97,36 @@ const DeleteBtn = styled.button`
   }
 `;
 
-//#endregion styled-components
+// 編輯按鈕
+const EditBtn = styled.button`
+  background-color: initial;
+  border: none;
+  cursor: pointer;
 
+  // 透過明暗改變處理hover效果，因應不同瀏覽器做了多個設置
+  &:hover {
+    -webkit-filter: brightness(80%);
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
+  }
+`;
+
+//#endregion styled-components
 export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo, setTodo, setEditMode } = useTodo();
+  const { toggleTodo, deleteTodo, updateTodo, setTodo, setEditMode } =
+    useTodo();
+
+  // 編輯狀態時的暫時文字，預設值為todos.map傳進來的文字
+  const [tempConten, setTempContent] = useState(todoContent);
+
+  // 即時儲存暫時輸入框的內容
+  const handleTempContentChange = (e) => {
+    setTempContent(e.target.value);
+  };
 
   // 開啟/關閉編輯模式
   const enableEditMode = (id, todoContent) => {
@@ -107,11 +134,15 @@ export default function TodoItem({ todoContent, id, complete }) {
     setTodo({ id, todoContent });
   };
 
-  const handleChange = () => {
+  const handleToggle = () => {
     toggleTodo(id);
   };
 
-  const handleClick = () => {
+  const handleEdit = () => {
+    updateTodo(id, tempConten);
+  };
+
+  const handleDelete = () => {
     deleteTodo(id);
   };
   return (
@@ -121,17 +152,24 @@ export default function TodoItem({ todoContent, id, complete }) {
           <HiddenCheckbox
             checked={complete}
             id={id}
-            onChange={handleChange}
+            onChange={handleToggle}
           ></HiddenCheckbox>
           <StyledCheckbox htmlFor={id}></StyledCheckbox>
         </CheckboxWrapper>
-        <ContentSpan complete={complete}>{todoContent}</ContentSpan>
-        <input type="text" value={todoContent} />
+        <ContentSpan  complete={complete}>{todoContent}</ContentSpan>
+        <input
+          type="text"
+          value={tempConten}
+          onChange={handleTempContentChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleEdit();
+          }}
+        />
       </Wrapper>
-      <DeleteBtn onClick={handleClick}>
-        <img src={deletedIcon} width={12} alt="delete the task" />
-      </DeleteBtn>
-      <DeleteBtn onClick={handleClick}>
+      <EditBtn>
+        <img src={EditIcon} width={12} alt="edit the task" />
+      </EditBtn>
+      <DeleteBtn onClick={handleDelete}>
         <img src={deletedIcon} width={12} alt="delete the task" />
       </DeleteBtn>
     </Container>
