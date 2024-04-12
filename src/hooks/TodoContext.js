@@ -1,10 +1,19 @@
-import TodoReducer, { ACTIONS, initState } from "./TodoReducer";
+ import TodoReducer, { ACTIONS, initState } from "./TodoReducer";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export const TodoContext = createContext(initState);
 
 export const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TodoReducer, initState);
+
+  // add 功能 & 編輯功能共用的todo state
+  const [todo, setTodo] = useState({
+    id: 0,
+    todoContent: "",
+  });
+  // 是否處在編輯狀態
+  const [editMode, setEditMode] = useState(false)
+
 
   // reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
 
@@ -58,7 +67,11 @@ export const TodoProvider = ({ children }) => {
     toggleTodo,
     deleteTodo,
     sort,
-    setSort
+    setSort,
+    todo,
+    setTodo,
+    editMode,
+    setEditMode,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

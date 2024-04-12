@@ -70,13 +70,11 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 //#endregion
 
 //- 解構完的 complete 傳入要加上{} props.complete不用
-//! notice: unknown  prop is being sent through the DOM 
-//! solution: shouldForwardProp 控制屬性傳遞 
-const ContentSpan = styled.span
-.withConfig({
+//! notice: unknown  prop is being sent through the DOM
+//! solution: shouldForwardProp 控制屬性傳遞
+const ContentSpan = styled.span.withConfig({
   shouldForwardProp: (props) => !["complete"].includes(props.complete),
-})
-`
+})`
   text-decoration: ${(props) => (props.complete ? "line-through" : "none")};
 `;
 
@@ -101,7 +99,13 @@ const DeleteBtn = styled.button`
 
 export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo } = useTodo();
+  const { toggleTodo, deleteTodo, setTodo, setEditMode } = useTodo();
+
+  // 開啟/關閉編輯模式
+  const enableEditMode = (id, todoContent) => {
+    setEditMode(true);
+    setTodo({ id, todoContent });
+  };
 
   const handleChange = () => {
     toggleTodo(id);
@@ -121,12 +125,12 @@ export default function TodoItem({ todoContent, id, complete }) {
           ></HiddenCheckbox>
           <StyledCheckbox htmlFor={id}></StyledCheckbox>
         </CheckboxWrapper>
-        <ContentSpan
-          complete={complete}
-        >
-          {todoContent}
-        </ContentSpan>
+        <ContentSpan complete={complete}>{todoContent}</ContentSpan>
+        <input type="text" value={todoContent} />
       </Wrapper>
+      <DeleteBtn onClick={handleClick}>
+        <img src={deletedIcon} width={12} alt="delete the task" />
+      </DeleteBtn>
       <DeleteBtn onClick={handleClick}>
         <img src={deletedIcon} width={12} alt="delete the task" />
       </DeleteBtn>

@@ -13,11 +13,11 @@ const Wrapper = styled.div`
   max-width: 600px;
   margin: 16px 0;
   color: #6b80c2;
-  `;
+`;
 const WrapperInput = styled.div`
   display: flex;
   justify-content: flex-start;
-  `;
+`;
 
 const Input = styled.input`
   padding: 0.8em;
@@ -30,7 +30,7 @@ const Input = styled.input`
   letter-spacing: 0.05em;
   flex-grow: 1;
   flex-shrink: 1;
-  `;
+`;
 
 const AddBtn = styled.button`
   border: none;
@@ -52,38 +52,38 @@ const AddBtn = styled.button`
 
 const Control = () => {
   // 解構 Context 傳過來的 "增加todo" 操作
-  const { addTodo } = useTodo();
+  const { addTodo, todo, setTodo } = useTodo();
 
   // useState 及時儲存輸入框的內容
-  const [todoContent, setTodoContent] = useState("");
+  // const [todoContent, setTodoContent] = useState("");
+
   const handleChange = (e) => {
-    setTodoContent(e.target.value);
+    setTodo((prev) => ({ ...prev, todoContent: e.target.value }));
+    // setTodoContent(e.target.value);
   };
 
   // 點擊"+"按鈕後將todo內容傳入addTodo，並將輸入框清空
   const handleClick = (e) => {
     // 如果輸入框沒有輸入內容就會出現警告，並終止函式
-    if (!todoContent) {
+    if (!todo.todoContent) {
       alert("輸入框不可為空");
       return;
     }
-    addTodo(todoContent);
-    setTodoContent("");
+    addTodo(todo.todoContent);
+    setTodo((prev) => ({ ...prev, todoContent: "" }));
   };
 
   const scrollToBottom = () => {
     window.scrollTo(0, document.body.scrollHeight);
   };
-  
-  
+
   // 放在handleClick裡，滾動會在增加前執行，少一個todo的高度，因此放在useEffect。
   // 依賴的對象如果是Context 的fn會有不必要的渲染(每次操作其他的dispatch就會觸發)
 
   // 監聽文字，每次輸入框的文字有改變就滾動到最底(包括輸入跟清空)
   useEffect(() => {
-    scrollToBottom()
-  }, [todoContent]);
-
+    scrollToBottom();
+  }, [todo.todoContent]);
 
   return (
     <>
@@ -91,8 +91,8 @@ const Control = () => {
         <div>Add to list</div>
         <WrapperInput>
           <Input
-            value={todoContent}
-          // 為了方便使用者增加todo，使用Enter鍵也可以發送
+            value={todo.todoContent}
+            // 為了方便使用者增加todo，使用Enter鍵也可以發送
             onKeyDown={(e) => {
               if (e.key === "Enter") handleClick();
             }}
