@@ -57,7 +57,7 @@ export default function ProgressBar() {
       setPercent(result);
     }
   }, [todos, done]);
-  console.log(percent);
+
   return (
     <Wrapper>
       <ProgressNum>{percent}%</ProgressNum>

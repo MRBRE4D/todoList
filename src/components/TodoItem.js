@@ -7,7 +7,7 @@ import { useState } from "react";
 //#region styled-components
 // todoItem 外容器
 const Container = styled.label`
-  position: relative;
+  width: 100%;
   padding: 16px;
   margin-bottom: 8px;
   display: flex;
@@ -22,14 +22,16 @@ const Container = styled.label`
   }
 `;
 
-// todoItem 內容器(checkbox + todoTitle)
+// todoItem 內容器(checkbox + todoContent)
 const Wrapper = styled.div`
+  max-width: 80%;
+  width: 80%;
   display: flex;
   align-items: center;
 `;
 
 //-           客製化checkbox              -//
-//#region
+//#region custom-checkbox
 // 純CSS 動態更改label樣式
 // checkbox容器
 const CheckboxWrapper = styled.div`
@@ -69,7 +71,7 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
     border-radius: 6px;
   }
 `;
-//#endregion
+//#endregion custom-checkbox
 
 //- 解構完的 complete 傳入要加上{} props.complete不用
 //! notice: unknown  prop is being sent through the DOM
@@ -77,7 +79,21 @@ const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
 const ContentSpan = styled.span.withConfig({
   shouldForwardProp: (props) => !["complete"].includes(props.complete),
 })`
+  max-width: 50%;
+  width: 50%;
+  flex-grow: 1;
+  flex-basis: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   text-decoration: ${(props) => (props.complete ? "line-through" : "none")};
+`;
+
+const BtnSpan = styled.span`
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  justify-content: space-between;
 `;
 
 // 刪除按鈕
@@ -99,6 +115,7 @@ const DeleteBtn = styled.button`
 
 // 編輯按鈕
 const EditBtn = styled.button`
+  margin-right: 5px;
   background-color: initial;
   border: none;
   cursor: pointer;
@@ -114,39 +131,55 @@ const EditBtn = styled.button`
   }
 `;
 
+// 編輯輸入框
+const TempTextContentInput = styled.input`
+  max-width: 50%;
+  width: 50%;
+  font-size: 1rem;
+  color: #6b80c2;
+  margin: 0;
+  background-color: #e9e8ff;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  letter-spacing: 0.05em;
+`;
+
 //#endregion styled-components
 export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo, updateTodo, setTodo, setEditMode } =
-    useTodo();
+  const { toggleTodo, deleteTodo, updateTodo } = useTodo();
+
+  const [isShowTempInput, setIsShowTempInput] = useState(false);
 
   // 編輯狀態時的暫時文字，預設值為todos.map傳進來的文字
-  const [tempConten, setTempContent] = useState(todoContent);
+  const [tempContent, setTempContent] = useState(todoContent);
 
   // 即時儲存暫時輸入框的內容
   const handleTempContentChange = (e) => {
     setTempContent(e.target.value);
   };
 
-  // 開啟/關閉編輯模式
-  const enableEditMode = (id, todoContent) => {
-    setEditMode(true);
-    setTodo({ id, todoContent });
-  };
 
   const handleToggle = () => {
     toggleTodo(id);
   };
 
+  const handleUpdate = () => {
+    updateTodo(id, tempContent);
+    setIsShowTempInput(!isShowTempInput);
+  };
+
   const handleEdit = () => {
-    updateTodo(id, tempConten);
+    setIsShowTempInput(!isShowTempInput);
   };
 
   const handleDelete = () => {
     deleteTodo(id);
   };
+
   return (
-    <Container>
+    <Container onDoubleClick={handleEdit}>
       <Wrapper>
         <CheckboxWrapper>
           <HiddenCheckbox
@@ -156,22 +189,32 @@ export default function TodoItem({ todoContent, id, complete }) {
           ></HiddenCheckbox>
           <StyledCheckbox htmlFor={id}></StyledCheckbox>
         </CheckboxWrapper>
-        <ContentSpan  complete={complete}>{todoContent}</ContentSpan>
-        <input
-          type="text"
-          value={tempConten}
-          onChange={handleTempContentChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleEdit();
-          }}
-        />
+        {/* 如以 styled-components傳入參數動態更改，會有前後位置不一的問題 */}
+        {!isShowTempInput ? (
+          <ContentSpan complete={complete} >
+            {todoContent}
+          </ContentSpan>
+        ) : (
+          <TempTextContentInput
+            type="text"
+            value={tempContent}
+            autoFocus
+            onBlur={handleEdit}
+            onChange={handleTempContentChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleUpdate();
+            }}
+          />
+        )}
       </Wrapper>
-      <EditBtn>
-        <img src={EditIcon} width={12} alt="edit the task" />
-      </EditBtn>
-      <DeleteBtn onClick={handleDelete}>
-        <img src={deletedIcon} width={12} alt="delete the task" />
-      </DeleteBtn>
+      <BtnSpan>
+        <EditBtn onClick={handleEdit}>
+          <img src={EditIcon} width={12} alt="edit the task" />
+        </EditBtn>
+        <DeleteBtn onClick={handleDelete}>
+          <img src={deletedIcon} width={12} alt="delete the task" />
+        </DeleteBtn>
+      </BtnSpan>
     </Container>
   );
 }

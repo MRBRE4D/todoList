@@ -6,11 +6,6 @@ export const TodoContext = createContext(initState);
 export const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TodoReducer, initState);
 
-  // add 功能 & 編輯功能共用的todo state
-  const [todo, setTodo] = useState({
-    id: 0,
-    todoContent: "",
-  });
   // 是否處在編輯狀態
   const [editMode, setEditMode] = useState(false);
 
@@ -29,8 +24,8 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
-  //! error: react warning non-boolean attr
-
+  //! error: react warning non-boolean attr  將complete的值由布林改為數字
+// 利用map + if 更改指定todo的完成狀態
   const toggleTodo = (todoId) => {
     const newTodo = state.todos.map((todo) => {
       if (todo.id === todoId) {
@@ -57,20 +52,22 @@ export const TodoProvider = ({ children }) => {
     });
   };
 
+  // 利用map + if 指定要編輯的todo 
   const updateTodo = (todoId, todoContent) => {
-    const netTodo = state.todos.map((todo) => {
-      if (todo.id == todoId) {
+    const newTodo = state.todos.map((todo) => {
+      if (todo.id === todoId) {
         return {
           ...todo,
-          todoContent,
+          todoContent, 
         };
       }
+      return todo
     });
 
     dispatch({
       type: ACTIONS.EDIT_TODO,
       payload: {
-        todo: netTodo,
+        todo: newTodo,
       },
     });
   };
@@ -87,10 +84,6 @@ export const TodoProvider = ({ children }) => {
     updateTodo,
     sort,
     setSort,
-    todo,
-    setTodo,
-    editMode,
-    setEditMode,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
