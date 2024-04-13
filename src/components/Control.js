@@ -11,16 +11,19 @@ const Wrapper = styled.div`
   justify-content: space-between;
   height: 76px;
   max-width: 600px;
+  /* width: 100%; */
   margin: 16px 0;
   color: #6b80c2;
-  `;
+`;
 const WrapperInput = styled.div`
   display: flex;
   justify-content: flex-start;
-  `;
+`;
 
 const Input = styled.input`
-  padding: 0.8em;
+  font-size: 1.3rem;
+  padding: 0.4rem;
+  overflow: hidden;
   height: 1.5rem;
   margin-right: 4px;
   background-color: white;
@@ -30,7 +33,7 @@ const Input = styled.input`
   letter-spacing: 0.05em;
   flex-grow: 1;
   flex-shrink: 1;
-  `;
+`;
 
 const AddBtn = styled.button`
   border: none;
@@ -57,7 +60,6 @@ const Control = () => {
   // useState 及時儲存輸入框的內容
   const [todoContent, setTodoContent] = useState("");
 
-
   const handleChange = (e) => {
     setTodoContent(e.target.value);
   };
@@ -76,16 +78,14 @@ const Control = () => {
   const scrollToBottom = () => {
     window.scrollTo(0, document.body.scrollHeight);
   };
-  
-  
+
   // scrollToBottom 放在handleClick裡，滾動會在增加前執行，少一個todo的高度，因此放在useEffect。
   // 依賴的對象如果是Context 的fn會有不必要的渲染(每次操作其他的dispatch就會觸發)
 
   // 監聽文字，每次輸入框的文字有改變就滾動到最底(包括輸入跟清空)
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [todoContent]);
-
 
   return (
     <>
@@ -94,7 +94,7 @@ const Control = () => {
         <WrapperInput>
           <Input
             value={todoContent}
-          // 為了方便使用者增加todo，使用Enter鍵也可以發送
+            // 為了方便使用者增加todo，使用Enter鍵也可以發送
             onKeyDown={(e) => {
               if (e.key === "Enter") handleClick();
             }}
