@@ -42,7 +42,7 @@ export default function ProgressBar() {
   const [percent, setPercent] = useState(0);
 
   // 已完成的todo另外複製成陣列，以計算完成百分比
-  const done = todos.filter((todo) => {
+  const todoCompleted = todos.filter((todo) => {
     return todo.complete === 1;
   });
   // console.log("todos=", todos.length, ...todos);
@@ -52,11 +52,13 @@ export default function ProgressBar() {
   // 監聽全部的todo(分母)，以及完成任務的todo(分子)
   useEffect(() => {
     if (todos.length > 0) {
-      let num = (done.length / todos.length) * 100;
+      let num = (todoCompleted.length / todos.length) * 100;
       const result = num ? Math.floor(num) : 0;
       setPercent(result);
+    }else{
+      setPercent(0);
     }
-  }, [todos, done]);
+  }, [todos, todoCompleted]);
 
   return (
     <Wrapper>

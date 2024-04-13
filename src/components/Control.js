@@ -105,7 +105,7 @@ const Control = () => {
               handleClick();
             }}
           >
-            <img src={addIcon} alt="增加事項" />
+            <img src={addIcon} alt="增加任務" />
           </AddBtn>
         </WrapperInput>
       </Wrapper>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import checkedIcon from "../assets/icon/check.png";
 import deletedIcon from "../assets/icon/clear.png";
-import EditIcon from "../assets/icon/edit.png";
+import editIcon from "../assets/icon/edit.png";
 import { useTodo } from "../hooks/TodoContext";
 import { useState } from "react";
 //#region styled-components
@@ -150,6 +150,7 @@ export default function TodoItem({ todoContent, id, complete }) {
   // 由 Context 傳入的操作函式
   const { toggleTodo, deleteTodo, updateTodo } = useTodo();
 
+  // 開關編輯模式
   const [isShowTempInput, setIsShowTempInput] = useState(false);
 
   // 編輯狀態時的暫時文字，預設值為todos.map傳進來的文字
@@ -160,18 +161,23 @@ export default function TodoItem({ todoContent, id, complete }) {
     setTempContent(e.target.value);
   };
 
-
   const handleToggle = () => {
     toggleTodo(id);
   };
 
   const handleUpdate = () => {
+    if (!tempContent) {
+      alert("更新內容不可為空");
+      setTempContent(todoContent);
+      return;
+    }
     updateTodo(id, tempContent);
     setIsShowTempInput(!isShowTempInput);
   };
 
   const handleEdit = () => {
     setIsShowTempInput(!isShowTempInput);
+    setTempContent(todoContent)
   };
 
   const handleDelete = () => {
@@ -191,9 +197,7 @@ export default function TodoItem({ todoContent, id, complete }) {
         </CheckboxWrapper>
         {/* 如以 styled-components傳入參數動態更改，會有前後位置不一的問題 */}
         {!isShowTempInput ? (
-          <ContentSpan complete={complete} >
-            {todoContent}
-          </ContentSpan>
+          <ContentSpan complete={complete}>{todoContent}</ContentSpan>
         ) : (
           <TempTextContentInput
             type="text"
@@ -209,7 +213,7 @@ export default function TodoItem({ todoContent, id, complete }) {
       </Wrapper>
       <BtnSpan>
         <EditBtn onClick={handleEdit}>
-          <img src={EditIcon} width={12} alt="edit the task" />
+          <img src={editIcon} width={12} alt="edit the task" />
         </EditBtn>
         <DeleteBtn onClick={handleDelete}>
           <img src={deletedIcon} width={12} alt="delete the task" />
