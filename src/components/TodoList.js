@@ -10,7 +10,9 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const AllTodoControlerWrapper = styled.div`
+const AllTodoControlerWrapper = styled.div.withConfig({
+  shouldForwardProp: (props) => !["todos"].includes(props.todos),
+})`
   // 沒有任何任務的時候不顯示多重操作按鈕
   ${(props) => (props.todos ? "none" : "visibility:hidden;")}
   margin-bottom: 8px;
@@ -19,6 +21,7 @@ const AllTodoControlerWrapper = styled.div`
   justify-content: space-between;
 `;
 
+// 全選按鈕
 const SelectAllBtn = styled.button`
   background-color: initial;
   border: none;
@@ -34,7 +37,7 @@ const SelectAllBtn = styled.button`
     transition: all 0.2s ease-in-out;
   }
 `;
-
+// 刪除已完成的所有任務按鈕
 const DeleteSelectedBtn = styled.button`
   background-color: initial;
   border: none;
