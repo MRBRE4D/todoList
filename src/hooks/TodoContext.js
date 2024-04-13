@@ -6,14 +6,11 @@ export const TodoContext = createContext(initState);
 export const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TodoReducer, initState);
 
-  // 是否處在編輯狀態
-  const [editMode, setEditMode] = useState(false);
-
   // reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
 
   const addTodo = (todoContent) => {
     const todo = todoObj(todoContent);
-    // 複製一份新陣列加進新的todo
+    // 複製一份新陣列加進新的任務
     const newTodo = state.todos.concat(todo);
 
     dispatch({
@@ -25,7 +22,7 @@ export const TodoProvider = ({ children }) => {
   };
 
   //! error: react warning non-boolean attr  將complete的值由布林改為數字
-// 利用map + if 更改指定todo的完成狀態
+  // 利用map + if 更改指定任務的完成狀態
   const toggleTodo = (todoId) => {
     const newTodo = state.todos.map((todo) => {
       if (todo.id === todoId) {
@@ -41,7 +38,21 @@ export const TodoProvider = ({ children }) => {
       },
     });
   };
-  // 利用filter刪掉對應id的todo
+  // 利用同一個Type 操作 全部任務的選取
+  const toggleAllTodo = () => {
+    const newTodo = state.todos.map((todo) => {
+      return { ...todo, complete:  1 };
+    });
+
+    dispatch({
+      type: ACTIONS.TOGGLE_TODO,
+      payload: {
+        todo: newTodo,
+      },
+    });
+  };
+
+  // 利用filter刪掉對應id的任務
   const deleteTodo = (todoId) => {
     const newTodo = state.todos.filter((todo) => todo.id !== todoId);
     dispatch({
@@ -51,17 +62,27 @@ export const TodoProvider = ({ children }) => {
       },
     });
   };
+  // 刪除已完成的所有任務
+  const deleteSelectedTodo = () => {
+    const newTodo = state.todos.filter((todo) => todo.complete === 0);
+    dispatch({
+      type: ACTIONS.DELETE_TODO,
+      payload: {
+        todo: newTodo,
+      },
+    });
+  };
 
-  // 利用map + if 指定要編輯的todo 
+  // 利用map + if 指定要編輯的todo
   const updateTodo = (todoId, todoContent) => {
     const newTodo = state.todos.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
-          todoContent, 
+          todoContent,
         };
       }
-      return todo
+      return todo;
     });
 
     dispatch({
@@ -80,7 +101,9 @@ export const TodoProvider = ({ children }) => {
     todos: state.todos,
     addTodo,
     toggleTodo,
+    toggleAllTodo,
     deleteTodo,
+    deleteSelectedTodo,
     updateTodo,
     sort,
     setSort,
