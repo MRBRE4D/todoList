@@ -4,7 +4,8 @@ import { useTodo } from "../hooks/TodoContext";
 import selectAllIcon from "../assets/icon/selectAll.png";
 import deleteSelectedIcon from "../assets/icon/trash.png";
 
-const Wrapper = styled.div`
+//#region styled-components
+const Wrapper = styled.label`
   margin-top: 12px;
   display: flex;
   flex-direction: column;
@@ -54,7 +55,9 @@ const DeleteSelectedBtn = styled.button`
   }
 `;
 
-export default function TodoList() {
+//#endregion styled-components
+
+export default function TodoList({ provided, snapshot }) {
   const { todos, sort, toggleAllTodo, deleteSelectedTodo } = useTodo();
 
   const handleSelectAll = () => {
@@ -70,42 +73,51 @@ export default function TodoList() {
   // console.log("length=",todos.length)
   // console.log(...todos);
   return (
-    <Wrapper>
-      <AllTodoControlerWrapper todos={todos.length}>
-        <SelectAllBtn onClick={handleSelectAll}>
-          <img src={selectAllIcon} alt="Select All Todo" width={20} />
-        </SelectAllBtn>
-        <DeleteSelectedBtn onClick={handleDeleteSelected}>
-          <img src={deleteSelectedIcon} alt="Delete Checked Todo" width={20} />
-        </DeleteSelectedBtn>
-      </AllTodoControlerWrapper>
-
-      {todos
-        .sort((a, b) => {
-          // 當sort 為true，將完成的任務置底，並以時間戳記排序
-
-          if (sort) {
-            return a.complete === b.complete
-              ? a.id < b.id
-                ? -1
-                : 1
-              : a.complete
-              ? 1
-              : -1;
-          } else {
-            return a.id < b.id ? -1 : 1;
-          }
-        })
-        .map((todo) => {
-          return (
-            <TodoItem
-              key={todo.id}
-              todoContent={todo.todoContent}
-              id={todo.id}
-              complete={todo.complete}
+    <div ref={provided.innerRef} {...provided.droppableProps}>
+      <Wrapper>
+        <AllTodoControlerWrapper todos={todos.length}>
+          <SelectAllBtn onClick={handleSelectAll}>
+            <img src={selectAllIcon} alt="Select All Todo" width={20} />
+          </SelectAllBtn>
+          <DeleteSelectedBtn onClick={handleDeleteSelected}>
+            <img
+              src={deleteSelectedIcon}
+              alt="Delete Checked Todo"
+              width={20}
             />
-          );
-        })}
-    </Wrapper>
+          </DeleteSelectedBtn>
+        </AllTodoControlerWrapper>
+        {todos
+          .sort((a, b) => {
+            // 當sort 為true，將完成的任務置底，並以時間戳記排序
+
+            if (sort) {
+              return a.complete === b.complete
+                ? a.id < b.id
+                  ? -1
+                  : 1
+                : a.complete
+                ? 1
+                : -1;
+            } else {
+              return a.id < b.id ? -1 : 1;
+            }
+          })
+          .map((todo, index) => {
+            return (
+              <TodoItem
+                key={todo.id}
+                index={index}
+                todoContent={todo.todoContent}
+                id={todo.id}
+                complete={todo.complete}
+                provided={provided}
+                snapshot={snapshot}
+              />
+            );
+          })}
+        {provided.placeholder}
+      </Wrapper>
+    </div>
   );
 }
