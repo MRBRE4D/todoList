@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Draggable } from "react-beautiful-dnd";
 import checkedIcon from "../assets/icon/check.png";
 import deletedIcon from "../assets/icon/clear.png";
 import editIcon from "../assets/icon/edit.png";
@@ -6,7 +7,7 @@ import { useTodo } from "../hooks/TodoContext";
 import { useState } from "react";
 //#region styled-components
 // todoItem 外容器
-const Container = styled.label`
+const Container = styled.div`
   width: 100%;
   padding: 16px;
   margin-bottom: 8px;
@@ -146,7 +147,14 @@ const TempTextContentInput = styled.input`
 `;
 
 //#endregion styled-components
-export default function TodoItem({ todoContent, id, complete }) {
+export default function TodoItem({
+  todoContent,
+  id,
+  complete,
+  index,
+  provided,
+  snapshot,
+}) {
   // 由 Context 傳入的操作函式
   const { toggleTodo, deleteTodo, updateTodo } = useTodo();
 
@@ -177,48 +185,61 @@ export default function TodoItem({ todoContent, id, complete }) {
 
   const handleEdit = () => {
     setIsShowTempInput(!isShowTempInput);
-    setTempContent(todoContent)
+    setTempContent(todoContent);
   };
 
   const handleDelete = () => {
     deleteTodo(id);
   };
 
+  const idString = id.toString()
   return (
-    <Container onDoubleClick={handleEdit}>
-      <Wrapper>
-        <CheckboxWrapper>
-          <HiddenCheckbox
-            checked={complete}
-            id={id}
-            onChange={handleToggle}
-          ></HiddenCheckbox>
-          <StyledCheckbox htmlFor={id}></StyledCheckbox>
-        </CheckboxWrapper>
-        {/* 如以 styled-components傳入參數動態更改，會有前後位置不一的問題 */}
-        {!isShowTempInput ? (
-          <ContentSpan complete={complete}>{todoContent}</ContentSpan>
-        ) : (
-          <TempTextContentInput
-            type="text"
-            value={tempContent}
-            autoFocus
-            onBlur={handleEdit}
-            onChange={handleTempContentChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleUpdate();
-            }}
-          />
-        )}
-      </Wrapper>
-      <BtnSpan>
-        <EditBtn onClick={handleEdit}>
-          <img src={editIcon} width={12} alt="edit the task" />
-        </EditBtn>
-        <DeleteBtn onClick={handleDelete}>
-          <img src={deletedIcon} width={12} alt="delete the task" />
-        </DeleteBtn>
-      </BtnSpan>
-    </Container>
+    <Draggable draggableId={"idString"} index={index}>
+      {(provided, snapshot) => {
+        return (
+          <Container
+            onDoubleClick={handleEdit}
+            ref={provided.innerRef}
+            snapshot={snapshot}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <Wrapper>
+              <CheckboxWrapper>
+                <HiddenCheckbox
+                  checked={complete}
+                  id={id}
+                  onChange={handleToggle}
+                ></HiddenCheckbox>
+                <StyledCheckbox htmlFor={id}></StyledCheckbox>
+              </CheckboxWrapper>
+              {/* 如以 styled-components傳入參數動態更改，會有前後位置不一的問題 */}
+              {!isShowTempInput ? (
+                <ContentSpan complete={complete}>{todoContent}</ContentSpan>
+              ) : (
+                <TempTextContentInput
+                  type="text"
+                  value={tempContent}
+                  autoFocus
+                  onBlur={handleEdit}
+                  onChange={handleTempContentChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleUpdate();
+                  }}
+                />
+              )}
+            </Wrapper>
+            <BtnSpan>
+              <EditBtn onClick={handleEdit}>
+                <img src={editIcon} width={12} alt="edit the task" />
+              </EditBtn>
+              <DeleteBtn onClick={handleDelete}>
+                <img src={deletedIcon} width={12} alt="delete the task" />
+              </DeleteBtn>
+            </BtnSpan>
+          </Container>
+        );
+      }}
+    </Draggable>
   );
 }

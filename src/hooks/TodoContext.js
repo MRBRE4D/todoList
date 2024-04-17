@@ -41,7 +41,7 @@ export const TodoProvider = ({ children }) => {
   // 利用同一個Type 操作 全部任務的選取
   const toggleAllTodo = () => {
     const newTodo = state.todos.map((todo) => {
-      return { ...todo, complete:  1 };
+      return { ...todo, complete: 1 };
     });
 
     dispatch({
@@ -96,6 +96,29 @@ export const TodoProvider = ({ children }) => {
   // 是否將已完成任務置底的State
   const [sort, setSort] = useState(false);
 
+  // react bDnd 拖曳結束時觸發
+  const onDragEnd = (e) => {
+    const { source, destination } = e;
+
+    if (!destination) {
+      return;
+    }
+
+    // 拷貝新的 todos
+    let newTodos = { ...state };
+
+    const [remove] = newTodos[source.droppableId].todos.splice(source.index, 1);
+
+    const newTodo = newTodos[destination.droppableId].todos.splice(destination.index, 0, remove);
+
+    dispatch({
+      type: ACTIONS.SORT_TODO,
+      payload: {
+        todo: newTodo,
+      },
+    });
+  };
+
   // 透過useContext將包成物件的value傳遞給子物件(children)，使用時解構
   const value = {
     todos: state.todos,
@@ -107,6 +130,7 @@ export const TodoProvider = ({ children }) => {
     updateTodo,
     sort,
     setSort,
+    onDragEnd,
   };
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;

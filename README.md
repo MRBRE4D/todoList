@@ -22,7 +22,8 @@ npm start
 - [X] Task Progress Bar
 - [x] Delete single task
 - [x] Custom scrollbar
-- [ ] Delete completed tasks
+- [x] Mark all task completed
+- [x] Delete completed tasks
 - [ ] Delete all tasks
 - [ ] Drag task to sort
 

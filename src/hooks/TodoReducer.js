@@ -9,16 +9,16 @@ export const ACTIONS = {
   TOGGLE_TODO: "TOGGLE_TODO",
   DELETE_TODO: "DELETE_TODO",
   EDIT_TODO: "EDIT_TODO",
+  SORT_TODO: "SORT_TODO",
 };
 
 const TodoReducer = (state, action) => {
-
   const { type, payload } = action;
 
   // console.log("type", type);
   // console.log("payload", payload);
-  
-//- reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
+
+  //- reducer 都只把資料回傳 真正處理的位置放在Context裡以方便維護
   switch (type) {
     case ACTIONS.ADD_TODO:
       return {
@@ -37,8 +37,13 @@ const TodoReducer = (state, action) => {
         ...state,
         todos: payload.todo,
       };
-    
+
     case ACTIONS.EDIT_TODO:
+      return {
+        ...state,
+        todos: payload.todo,
+      };
+    case ACTIONS.SORT_TODO:
       return {
         ...state,
         todos: payload.todo,
