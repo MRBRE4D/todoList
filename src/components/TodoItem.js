@@ -6,7 +6,7 @@ import { useTodo } from "../hooks/TodoContext";
 import { useState } from "react";
 //#region styled-components
 // todoItem 外容器
-const Container = styled.div`
+const Container = styled.label`
   width: 100%;
   padding: 16px;
   margin-bottom: 8px;
@@ -184,7 +184,6 @@ export default function TodoItem({ todoContent, id, complete, p }) {
     deleteTodo(id);
   };
 
-  const idString = id.toString();
   return (
     <Container
       onDoubleClick={handleEdit}

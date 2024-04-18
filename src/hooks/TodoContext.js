@@ -97,20 +97,45 @@ export const TodoProvider = ({ children }) => {
   const [sort, setSort] = useState(false);
 
   // react bDnd 拖曳結束時觸發
-  const onDragEnd = (e) => {
-    const { source, destination } = e;
+  // const onDragEnd = (e) => {
+  //   const { source, destination } = e;
 
-    if (!destination) {
-      return;
-    }
+  //   if (!destination) {
+  //     return;
+  //   }
 
-    // 拷貝新的 todos
-    let newTodos = { ...state };
+  //   // 拷貝新的 todos
+  //   let newTodos = { ...state };
 
-    const [remove] = newTodos[source.droppableId].todos.splice(source.index, 1);
+  //   const [remove] = newTodos[source.droppableId].todos.splice(source.index, 1);
 
-    const newTodo = newTodos[destination.droppableId].todos.splice(destination.index, 0, remove);
+  //   const newTodo = newTodos[destination.droppableId].todos.splice(destination.index, 0, remove);
 
+  //   dispatch({
+  //     type: ACTIONS.SORT_TODO,
+  //     payload: {
+  //       todo: newTodo,
+  //     },
+  //   });
+  // };
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    console.log("source.index:", source.index);
+    console.log("destination.index:", destination.index);
+    // // 如果沒有更改目的地就跳出
+    // if (!destination) {
+    // //   return;
+    // }
+    let arr = [...state.todos];
+    console.log("arr:",...arr)
+
+    const [remove] = arr.splice(source.index, 1);
+    console.log("arr2:",...arr)
+
+    arr.splice(destination.index, 0, remove);
+    console.log("arr3:",...arr)
+    const newTodo = arr
+    console.log("newTodo:",...newTodo)
     dispatch({
       type: ACTIONS.SORT_TODO,
       payload: {
