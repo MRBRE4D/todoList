@@ -1,8 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useTodo } from "../hooks/TodoContext";
-
 import TodoList from "./TodoList";
 import ProgressBar from "./ProgressBar";
 import Sort from "./Sort";
@@ -14,19 +11,11 @@ const Wrapper = styled.div`
 `;
 export default function Content() {
 
-const {onDragEnd} =useTodo()
-
-
-  
   return (
     <>
       <Wrapper>
         <ProgressBar />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="items">
-            {(provided, snapshot) => <TodoList provided={provided} snapshot={snapshot}/>}
-          </Droppable>
-        </DragDropContext>
+        <TodoList />
       </Wrapper>
       <Sort />
     </>

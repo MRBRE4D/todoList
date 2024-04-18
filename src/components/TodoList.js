@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import TodoItem from "./TodoItem";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useTodo } from "../hooks/TodoContext";
+import TodoItem from "./TodoItem";
 import selectAllIcon from "../assets/icon/selectAll.png";
 import deleteSelectedIcon from "../assets/icon/trash.png";
 
@@ -57,7 +58,7 @@ const DeleteSelectedBtn = styled.button`
 
 //#endregion styled-components
 
-export default function TodoList({ provided, snapshot }) {
+export default function TodoList() {
   const { todos, sort, toggleAllTodo, deleteSelectedTodo } = useTodo();
 
   const handleSelectAll = () => {
@@ -73,51 +74,62 @@ export default function TodoList({ provided, snapshot }) {
   // console.log("length=",todos.length)
   // console.log(...todos);
   return (
-    <div ref={provided.innerRef} {...provided.droppableProps}>
-      <Wrapper>
-        <AllTodoControlerWrapper todos={todos.length}>
-          <SelectAllBtn onClick={handleSelectAll}>
-            <img src={selectAllIcon} alt="Select All Todo" width={20} />
-          </SelectAllBtn>
-          <DeleteSelectedBtn onClick={handleDeleteSelected}>
-            <img
-              src={deleteSelectedIcon}
-              alt="Delete Checked Todo"
-              width={20}
-            />
-          </DeleteSelectedBtn>
-        </AllTodoControlerWrapper>
-        {todos
-          .sort((a, b) => {
-            // 當sort 為true，將完成的任務置底，並以時間戳記排序
+    <Wrapper>
+      <AllTodoControlerWrapper todos={todos.length}>
+        <SelectAllBtn onClick={handleSelectAll}>
+          <img src={selectAllIcon} alt="Select All Todo" width={20} />
+        </SelectAllBtn>
+        <DeleteSelectedBtn onClick={handleDeleteSelected}>
+          <img src={deleteSelectedIcon} alt="Delete Checked Todo" width={20} />
+        </DeleteSelectedBtn>
+      </AllTodoControlerWrapper>
+      <DragDropContext
+        onBeforeCapture={(e) => console.log("onBeforeCapture: ", e)}
+        onBeforeDragStart={(e) => console.log("onBeforeDragStart: ", e)}
+        onDragStart={(e) => console.log("onDragStart: ", e)}
+        onDragUpdate={(e) => console.log("onDragUpdate: ", e)}
+        onDragEnd={(e) => console.log("onDragEnd: ", e)}
+      >
+        <main>
+          <Droppable droppableId="dropId">
+            {(p) => (
+              <div ref={p.innerRef} {...p.droppableProps}>
+                {todos
+                  .sort((a, b) => {
+                    // 當sort 為true，將完成的任務置底，並以時間戳記排序
 
-            if (sort) {
-              return a.complete === b.complete
-                ? a.id < b.id
-                  ? -1
-                  : 1
-                : a.complete
-                ? 1
-                : -1;
-            } else {
-              return a.id < b.id ? -1 : 1;
-            }
-          })
-          .map((todo, index) => {
-            return (
-              <TodoItem
-                key={todo.id}
-                index={index}
-                todoContent={todo.todoContent}
-                id={todo.id}
-                complete={todo.complete}
-                provided={provided}
-                snapshot={snapshot}
-              />
-            );
-          })}
-        {provided.placeholder}
-      </Wrapper>
-    </div>
+                    if (sort) {
+                      return a.complete === b.complete
+                        ? a.id < b.id
+                          ? -1
+                          : 1
+                        : a.complete
+                        ? 1
+                        : -1;
+                    } else {
+                      return a.id < b.id ? -1 : 1;
+                    }
+                  })
+                  .map((todo, i) => {
+                    return (
+                      <Draggable draggableId={`${todo.id}`} index={i}>
+                        {(p) => (
+                          <TodoItem
+                            p={p}
+                            key={todo.id}
+                            todoContent={todo.todoContent}
+                            id={todo.id}
+                            complete={todo.complete}
+                          />
+                        )}
+                      </Draggable>
+                    );
+                  })}
+              </div>
+            )}
+          </Droppable>
+        </main>
+      </DragDropContext>
+    </Wrapper>
   );
 }
