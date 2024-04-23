@@ -148,12 +148,12 @@ const TempTextContentInput = styled.input`
 //#endregion styled-components
 export default function TodoItem({ todoContent, id, complete, p }) {
   // 由 Context 傳入的操作函式
-  const { toggleTodo, deleteTodo, updateTodo } = useTodo();
+  const { todos, toggleTodo, deleteTodo, updateTodo } = useTodo();
 
   // 開關編輯模式
   const [isShowTempInput, setIsShowTempInput] = useState(false);
 
-  // 編輯狀態時的暫時文字，預設值為todos.map傳進來的文字
+  // 編輯狀態時的暫時文字，預設值為todos.map傳進來的文字props
   const [tempContent, setTempContent] = useState(todoContent);
 
   // 即時儲存暫時輸入框的內容
@@ -183,15 +183,14 @@ export default function TodoItem({ todoContent, id, complete, p }) {
   const handleDelete = () => {
     deleteTodo(id);
   };
-
   return (
     <Container
-      onDoubleClick={handleEdit}
+      // onDoubleClick={handleEdit}
       ref={p.innerRef}
       {...p.draggableProps}
       {...p.dragHandleProps}
     >
-      <Wrapper>
+      <Wrapper >
         <CheckboxWrapper>
           <HiddenCheckbox
             checked={complete}

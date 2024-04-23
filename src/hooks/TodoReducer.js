@@ -43,6 +43,7 @@ const TodoReducer = (state, action) => {
         ...state,
         todos: payload.todo,
       };
+      
     case ACTIONS.SORT_TODO:
       return {
         ...state,
