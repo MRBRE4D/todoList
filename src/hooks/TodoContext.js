@@ -96,53 +96,43 @@ export const TodoProvider = ({ children }) => {
   // 是否將已完成任務置底的State
   const [sort, setSort] = useState(false);
 
-  // react bDnd 拖曳結束時觸發
-  // const onDragEnd = (e) => {
-  //   const { source, destination } = e;
-
-  //   if (!destination) {
-  //     return;
-  //   }
-
-  //   // 拷貝新的 todos
-  //   let newTodos = { ...state };
-
-  //   const [remove] = newTodos[source.droppableId].todos.splice(source.index, 1);
-
-  //   const newTodo = newTodos[destination.droppableId].todos.splice(destination.index, 0, remove);
-
-  //   dispatch({
-  //     type: ACTIONS.SORT_TODO,
-  //     payload: {
-  //       todo: newTodo,
-  //     },
-  //   });
-  // };
-  const onDragEnd = (result) => {
+  // bug : re-order之後由於sort是根據id(時間戳記)，因此每次更改完都會被sort回去(使用splice方法的狀況)
+  // solution: 直接交換 id 並交給 sort 排序，此方法一併解決[讓已完成任務置底，再取消置底後任務不回彈]的狀況
+  const onDragEnd = async(result) => {
     const { source, destination } = result;
-    console.log("source.index:", source.index);
-    console.log("destination.index:", destination.index);
-    // // 如果沒有更改目的地就跳出
-    // if (!destination) {
-    // //   return;
-    // }
-    let arr = [...state.todos];
-    console.log("arr:",...arr)
+    // console.log("result",result)
 
-    const [remove] = arr.splice(source.index, 1);
-    console.log("arr2:",...arr)
+    // 如果沒有更改目的地就跳出
+    if (!result.destination) return;
 
-    arr.splice(destination.index, 0, remove);
-    console.log("arr3:",...arr)
-    const newTodo = arr
-    console.log("newTodo:",...newTodo)
-    dispatch({
+    // 來源索引
+    const fromIndex = source.index;
+    // 目的索引
+    const toIndex = destination.index;
+    // 複製一份新的陣列 
+    let newTodo = [...state.todos];
+
+    // 來源id
+    const fromId = newTodo[fromIndex].id;
+    // 目的id
+    const toId = newTodo[toIndex].id;
+    // 交換兩者id
+    newTodo[fromIndex].id = toId;
+    newTodo[toIndex].id = fromId;
+
+    //// 如果用時間以外的排序可以嘗試此方法
+    // const [remove] = newTodo.splice(fromIndex,1)
+    // newTodo.splice(toIndex, 0, remove);
+
+    await dispatch({
       type: ACTIONS.SORT_TODO,
       payload: {
         todo: newTodo,
       },
     });
   };
+
+  // console.log("CONTEXTstate.todos:", state.todos);
 
   // 透過useContext將包成物件的value傳遞給子物件(children)，使用時解構
   const value = {
